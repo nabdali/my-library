@@ -8,7 +8,7 @@ router.get('/user', auth.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
     if(!user){ return res.sendStatus(401); }
 
-    return res.json({user: user.toAuthJSON()});
+    return res.json({result: user.toAuthJSON()});
   }).catch(next);
 });
 
@@ -34,7 +34,7 @@ router.put('/user', auth.required, function(req, res, next){
     }
 
     return user.save().then(function(){
-      return res.json({user: user.toAuthJSON()});
+      return res.json({result: user.toAuthJSON()});
     });
   }).catch(next);
 });
@@ -53,7 +53,7 @@ router.post('/users/login', function(req, res, next){
 
     if(user){
       user.token = user.generateJWT();
-      return res.json({user: user.toAuthJSON()});
+      return res.json({result: user.toAuthJSON()});
     } else {
       return res.status(422).json(info);
     }
@@ -68,7 +68,7 @@ router.post('/users', function(req, res, next){
   user.setPassword(req.body.user.password);
 
   user.save().then(function(){
-    return res.json({user: user.toAuthJSON()});
+    return res.json({result: user.toAuthJSON()});
   }).catch(next);
 });
 

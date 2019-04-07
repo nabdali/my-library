@@ -61,7 +61,7 @@ router.get('/', auth.optional, function(req, res, next) {
       var user = results[2];
 
       return res.json({
-        books: books.map(function(book){
+        result: books.map(function(book){
           return book.toJSONFor(user);
         }),
         booksCount: booksCount
@@ -80,7 +80,7 @@ router.post('/', auth.required, function(req, res, next) {
 
     return book.save().then(function(){
       console.log(book.owner);
-      return res.json({book: book.toJSONFor(user)});
+      return res.json({result: book.toJSONFor(user)});
     });
   }).catch(next);
 });
@@ -93,7 +93,7 @@ router.get('/:book', auth.optional, function(req, res, next) {
   ]).then(function(results){
     var user = results[0];
 
-    return res.json({book: req.book.toJSONFor(user)});
+    return res.json({result: req.book.toJSONFor(user)});
   }).catch(next);
 });
 
@@ -116,7 +116,7 @@ router.put('/:book', auth.required, function(req, res, next) {
       }
 
       req.book.save().then(function(book){
-        return res.json({book: book.toJSONFor(user)});
+        return res.json({result: book.toJSONFor(user)});
       }).catch(next);
     } else {
       return res.sendStatus(403);

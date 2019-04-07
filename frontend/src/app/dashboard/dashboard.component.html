@@ -1,0 +1,13 @@
+<mat-card class="books-card">
+    <mat-card-header>
+        <mat-card-title>Books</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-list role="list">
+          <mat-list-item role="listitem" *ngFor="let book of books">{{ book.title }}</mat-list-item>
+        </mat-list>
+    </mat-card-content>
+    <mat-card-actions>
+      <a routerLink="/book" class="btn btn-link">New book</a>
+    </mat-card-actions>
+</mat-card>
