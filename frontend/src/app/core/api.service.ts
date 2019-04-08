@@ -4,14 +4,16 @@ import {User} from "../model/user.model";
 import {Observable} from "rxjs/index";
 import {ApiResponse} from "../model/api.response";
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class ApiService {
 
   constructor(private http: HttpClient) { }
-  baseUrl: string = 'http://localhost:3000/api/users';
+  baseUrl: string = `${environment.url}/api/users`;
 
   login(loginPayload) : Observable<ApiResponse> {
-    return this.http.post<ApiResponse>('http://localhost:3000/' + 'api/users/login', {user: loginPayload});
+    return this.http.post<ApiResponse>(environment.url + '/api/users/login', {user: loginPayload});
   }
 
   getUsers() : Observable<ApiResponse> {
