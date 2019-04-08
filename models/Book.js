@@ -7,7 +7,7 @@ var BookSchema = new mongoose.Schema({
   slug: {type: String, lowercase: true, unique: true},
   title: String,
   description: String,
-  rate: {type: String, default: "0.0", match: [/^[0-9]\.(0|5)+$/, 'is invalid']},
+  rate: {type: Number, default: 0, min: 0, max: 10},
   categorie: { type: mongoose.Schema.Types.ObjectId, ref: 'Categorie', default: null },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, {timestamps: true});

@@ -108,6 +108,10 @@ router.put('/:slug', auth.required, function(req, res, next) {
         req.book.description = req.body.book.description;
       }
 
+      if(typeof req.body.book.rate !== 'undefined'){
+        req.book.rate = req.body.book.rate;
+      }
+
       if(typeof req.body.book.categorie !== 'undefined'){
         Categorie.findById(req.body.book.categorie).then(function(categorie) {
           req.book.categorie = categorie._id;

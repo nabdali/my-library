@@ -6,7 +6,7 @@
         <mat-nav-list role="list">
             <mat-list-item role="listitem" *ngFor="let book of books">
                 <a mat-list-item [routerLink]="['/book', book.slug]">
-                    {{ book.title }}
+                    {{ book.title }} - {{ book.rate }}
                 </a>
                 <button mat-icon-button (click)="remove(book.slug)">
                     <mat-icon>delete_outline</mat-icon>

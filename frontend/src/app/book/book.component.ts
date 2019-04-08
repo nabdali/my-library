@@ -30,7 +30,8 @@ export class BookComponent implements OnInit {
     this.bookForm = 
         this.formBuilder.group({
           title: ['', Validators.required],
-          description: ['', Validators.required]});
+          description: ['', Validators.required],
+          rate: ['']});
     const slug = this.route.snapshot.paramMap.get('slug');
     if(slug !== null && slug !== null) {
       this.update = true;
@@ -39,7 +40,7 @@ export class BookComponent implements OnInit {
         .subscribe(
           data => {
             this.book = data.result
-            this.bookForm.setValue({title: data.result.title, description: data.result.description})
+            this.bookForm.setValue({title: data.result.title, description: data.result.description, rate: data.result.rate})
             this.loading = false
           },
           error => this.loading = false
@@ -55,6 +56,8 @@ export class BookComponent implements OnInit {
     this.loading = true;
     this.book.title = this.form.title.value;
     this.book.description = this.form.description.value;
+    console.log(this.form.rate.value);
+    this.book.rate = this.form.rate.value;
 
     this.bookService.createBook(this.book)
         .subscribe(
@@ -74,8 +77,15 @@ export class BookComponent implements OnInit {
     this.loading = true;
     this.book.title = this.form.title.value;
     this.book.description = this.form.description.value;
+    console.log(this.form.rate.value);
+    this.book.rate = this.form.rate.value;
 
-    this.bookService.updateBook({slug: this.book.slug, title: this.book.title, description: this.book.description})
+    this.bookService.updateBook({
+      slug: this.book.slug,
+      title: this.book.title,
+      description: this.book.description,
+      rate: this.book.rate
+    })
         .subscribe(
             data => {
                 this.loading = false;
@@ -84,5 +94,16 @@ export class BookComponent implements OnInit {
             error => {
                 this.loading = false;
             });
+  }
+  formatLabel(value: number | null) {
+    if (!value) {
+      return 0;
+    }
+
+    if (value >= 10) {
+      return Math.round(value / 10) + 'k';
+    }
+
+    return value;
   }
 }
