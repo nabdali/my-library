@@ -17,6 +17,7 @@ import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookComponent } from './book/book.component';
 import { CategorieService } from './core/categorie.service';
+import { CategorieComponent } from './categorie/categorie.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { CategorieService } from './core/categorie.service';
     LoginComponent,
     RegisterComponent,
     DashboardComponent,
-    BookComponent
+    BookComponent,
+    CategorieComponent
   ],
   imports: [
     BrowserModule,
