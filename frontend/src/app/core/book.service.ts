@@ -26,7 +26,7 @@ export class BookService {
     return this.http.put<ApiResponse>(`${this.baseUrl}/${book.slug}`, {book});
   }
 
-  deleteBook(id: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(`${this.baseUrl}/${id}`);
+  deleteBook(slug: string): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.baseUrl}/${slug}`);
   }
 }

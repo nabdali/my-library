@@ -8,6 +8,9 @@
                 <a mat-list-item [routerLink]="['/book', book.slug]">
                     {{ book.title }}
                 </a>
+                <button mat-icon-button (click)="remove(book.slug)">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
             </mat-list-item>
         </mat-nav-list>
     </mat-card-content>

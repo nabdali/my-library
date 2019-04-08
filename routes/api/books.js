@@ -128,7 +128,7 @@ router.delete('/:slug', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if (!user) { return res.sendStatus(401); }
 
-    if(req.book.owner._id.toString() === req.payload._id.toString()){
+    if(req.book.owner._id.toString() === req.payload.id.toString()){
       return req.book.remove().then(function(){
         return res.sendStatus(204);
       });
