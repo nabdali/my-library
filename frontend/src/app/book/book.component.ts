@@ -3,6 +3,8 @@ import { Book } from '../model/book.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BookService } from '../core/book.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Categorie } from '../model/categorie.model';
+import { CategorieService } from '../core/categorie.service';
 
 @Component({
   selector: 'app-book',
@@ -12,6 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class BookComponent implements OnInit {
   bookForm: FormGroup;
   book: Book = new Book();
+  categories: Array<Categorie> = [];
   submitted = false;
   loading = false;
   update = false;
@@ -19,6 +22,7 @@ export class BookComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private bookService: BookService,
+    private categorieService: CategorieService,
     private route: ActivatedRoute,
   ) {
     if (!localStorage.getItem('token') || localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) { 
@@ -27,10 +31,15 @@ export class BookComponent implements OnInit {
   }
   //TODO: Improve function
   ngOnInit() {
+    this.categorieService.getCategories()
+        .subscribe(
+          data => this.categories = data.result
+        );
     this.bookForm = 
         this.formBuilder.group({
           title: ['', Validators.required],
           description: ['', Validators.required],
+          categorie: ['', Validators.required],
           rate: ['']});
     const slug = this.route.snapshot.paramMap.get('slug');
     if(slug !== null && slug !== null) {
@@ -40,7 +49,11 @@ export class BookComponent implements OnInit {
         .subscribe(
           data => {
             this.book = data.result
-            this.bookForm.setValue({title: data.result.title, description: data.result.description, rate: data.result.rate})
+            this.bookForm.setValue({
+              title: data.result.title,
+              description: data.result.description,
+              categorie: data.result.categorie._id,
+              rate: data.result.rate})
             this.loading = false
           },
           error => this.loading = false
@@ -56,7 +69,7 @@ export class BookComponent implements OnInit {
     this.loading = true;
     this.book.title = this.form.title.value;
     this.book.description = this.form.description.value;
-    console.log(this.form.rate.value);
+    this.book.categorie = this.form.categorie.value;
     this.book.rate = this.form.rate.value;
 
     this.bookService.createBook(this.book)
@@ -77,13 +90,14 @@ export class BookComponent implements OnInit {
     this.loading = true;
     this.book.title = this.form.title.value;
     this.book.description = this.form.description.value;
-    console.log(this.form.rate.value);
+    this.book.categorie = this.form.categorie.value;
     this.book.rate = this.form.rate.value;
 
     this.bookService.updateBook({
       slug: this.book.slug,
       title: this.book.title,
       description: this.book.description,
+      categorie: this.book.categorie,
       rate: this.book.rate
     })
         .subscribe(

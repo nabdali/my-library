@@ -11,7 +11,9 @@ import {
   MatIconModule,
   MatProgressSpinnerModule,
   MatListModule,
-  MatSliderModule
+  MatSliderModule,
+  MatOptionModule,
+  MatSelectModule
 } from '@angular/material';
 
 const ngModules: Array<any> = [
@@ -26,7 +28,9 @@ const ngModules: Array<any> = [
   MatIconModule,
   MatProgressSpinnerModule,
   MatListModule,
-  MatSliderModule
+  MatSliderModule,
+  MatOptionModule,
+  MatSelectModule
 ];
 
 @NgModule({

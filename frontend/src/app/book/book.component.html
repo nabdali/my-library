@@ -10,13 +10,21 @@
             <mat-form-field class="full-width">
                 <textarea matInput placeholder="Description" formControlName="description" name="description" required></textarea>
             </mat-form-field>
+            <mat-form-field *ngIf="categories.length > 0">
+                <mat-label>Categorie</mat-label>
+                <mat-select placeholder="Categorie" formControlName="categorie" name="categorie">
+                    <mat-option *ngFor="let categorie of categories" [value]="categorie._id">
+                        {{categorie.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <div>
                 <label>Rate: </label>
                 <mat-slider 
                     class="full-width"
                     thumbLabel
                     placeholder="Rate" 
-                    min="0" 
+                    min="0"
                     max="10" 
                     step="0.5" 
                     formControlName="rate" 

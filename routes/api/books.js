@@ -113,9 +113,7 @@ router.put('/:slug', auth.required, function(req, res, next) {
       }
 
       if(typeof req.body.book.categorie !== 'undefined'){
-        Categorie.findById(req.body.book.categorie).then(function(categorie) {
-          req.book.categorie = categorie._id;
-        })
+        req.book.categorie = req.body.book.categorie;
       }
 
       req.book.save().then(function(book){
