@@ -16,6 +16,8 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookComponent } from './book/book.component';
+import { CategorieService } from './core/categorie.service';
+import { CategorieComponent } from './categorie/categorie.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { BookComponent } from './book/book.component';
     LoginComponent,
     RegisterComponent,
     DashboardComponent,
-    BookComponent
+    BookComponent,
+    CategorieComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,7 @@ import { BookComponent } from './book/book.component';
     HttpClientModule,
     CustomMaterialModule
   ],
-  providers: [ApiService, BookService, {provide: HTTP_INTERCEPTORS,
+  providers: [ApiService, BookService, CategorieService, {provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi : true}],
   bootstrap: [AppComponent]

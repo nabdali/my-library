@@ -6,8 +6,8 @@ var User = mongoose.model('User');
 var auth = require('../auth');
 
 // Preload book objects on routes with ':book'
-router.param('book', function(req, res, next, id) {
-    Book.findOne({ _id: id})
+router.param('slug', function(req, res, next, slug) {
+    Book.findOne({slug})
     .populate('owner')
     .populate('categorie')
     .then(function (book) {
@@ -86,10 +86,9 @@ router.post('/', auth.required, function(req, res, next) {
 });
 
 // return a book
-router.get('/:book', auth.optional, function(req, res, next) {
+router.get('/:slug', auth.optional, function(req, res, next) {
   Promise.all([
-    req.payload ? User.findById(req.payload.id) : null,
-    req.article.populate('owner').execPopulate()
+    req.payload ? User.findById(req.payload.id) : null
   ]).then(function(results){
     var user = results[0];
 
@@ -98,7 +97,7 @@ router.get('/:book', auth.optional, function(req, res, next) {
 });
 
 // update book
-router.put('/:book', auth.required, function(req, res, next) {
+router.put('/:slug', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if(req.book.owner._id.toString() === req.payload.id.toString()){
       if(typeof req.body.book.title !== 'undefined'){
@@ -109,10 +108,12 @@ router.put('/:book', auth.required, function(req, res, next) {
         req.book.description = req.body.book.description;
       }
 
+      if(typeof req.body.book.rate !== 'undefined'){
+        req.book.rate = req.body.book.rate;
+      }
+
       if(typeof req.body.book.categorie !== 'undefined'){
-        Categorie.findById(req.body.book.categorie).then(function(categorie) {
-          req.book.categorie = categorie._id;
-        })
+        req.book.categorie = req.body.book.categorie;
       }
 
       req.book.save().then(function(book){
@@ -125,7 +126,7 @@ router.put('/:book', auth.required, function(req, res, next) {
 });
 
 // delete book
-router.delete('/:book', auth.required, function(req, res, next) {
+router.delete('/:slug', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if (!user) { return res.sendStatus(401); }
 

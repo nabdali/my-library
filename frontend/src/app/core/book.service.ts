@@ -14,8 +14,8 @@ export class BookService {
     return this.http.get<ApiResponse>(this.baseUrl);
   }
 
-  getBookById(id: number): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.baseUrl + id);
+  getBookBySlug(slug: string): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.baseUrl}/${slug}`);
   }
 
   createBook(book: Book): Observable<ApiResponse> {
@@ -23,10 +23,10 @@ export class BookService {
   }
 
   updateBook(book: Book): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.baseUrl}/${book._id}`, book);
+    return this.http.put<ApiResponse>(`${this.baseUrl}/${book.slug}`, {book});
   }
 
-  deleteBook(id: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(`${this.baseUrl}/${id}`);
+  deleteBook(slug: string): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.baseUrl}/${slug}`);
   }
 }

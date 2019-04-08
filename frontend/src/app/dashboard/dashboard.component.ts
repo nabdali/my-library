@@ -24,13 +24,18 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.bookService.getBooks()
-    .subscribe(
-      data => {
-        console.log(data)
-        this.books = data.result
-        console.log(this.books)},
-      error => this.loading = false
-    );
+      .subscribe(
+        data => this.books = data.result,
+        error => this.loading = false
+      );
+  }
+  remove(slug: string) {
+    this.loading = true;
+    this.bookService.deleteBook(slug)
+      .subscribe(
+        data => this.ngOnInit(),
+        error => this.loading = false
+      );
   }
 
 }

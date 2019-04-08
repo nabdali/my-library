@@ -10,7 +10,10 @@ import {
   MatMenuModule,
   MatIconModule,
   MatProgressSpinnerModule,
-  MatListModule
+  MatListModule,
+  MatSliderModule,
+  MatOptionModule,
+  MatSelectModule
 } from '@angular/material';
 
 const ngModules: Array<any> = [
@@ -24,7 +27,10 @@ const ngModules: Array<any> = [
   MatMenuModule,
   MatIconModule,
   MatProgressSpinnerModule,
-  MatListModule
+  MatListModule,
+  MatSliderModule,
+  MatOptionModule,
+  MatSelectModule
 ];
 
 @NgModule({
