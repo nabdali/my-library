@@ -3,6 +3,7 @@ var router = require('express').Router();
 var passport = require('passport');
 var User = mongoose.model('User');
 var auth = require('../auth');
+var nodemailer = require('nodemailer');
 
 router.get('/user', auth.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
@@ -66,6 +67,47 @@ router.post('/users', function(req, res, next){
   user.username = req.body.user.username;
   user.email = req.body.user.email;
   user.setPassword(req.body.user.password);
+
+  user.save().then(function(){
+    return res.json({result: user.toAuthJSON()});
+  }).catch(next);
+});
+
+router.post('/send', auth.required, function(req, res, next){
+  User.findById(req.payload.id).then(function(user){
+    if(!user){ return res.sendStatus(401);}
+    const to = req.body.to;
+
+    let smtpTransport = nodemailer.createTransport({
+      host: process.env.SMPT_SERVER,
+      port: 587,
+      secure: false,
+      auth: {
+          user: process.env.EMAIL, 
+          pass: process.env.EMAIL_MDP  
+      }
+    });
+  
+    let mail = {
+    from: '"My book" <my@otakutech.ovh>', 
+    to: to, 
+    subject: user.username + "vous conseille un livre", 
+    text: req.body.book,
+    html: ''
+    };
+
+    smtpTransport.sendMail(mail, function(error, response){
+      if(error){
+          console.error("Error while try to sent mail", new Date());
+          console.log(error);
+      }else{
+          console.log("Mail sent succesfull", new Date())
+      }
+      smtpTransport.close();
+    });
+
+  });
+  
 
   user.save().then(function(){
     return res.json({result: user.toAuthJSON()});
