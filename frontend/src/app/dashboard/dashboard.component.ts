@@ -25,10 +25,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.bookService.getBooks()
     .subscribe(
-      data => {
-        console.log(data)
-        this.books = data.result
-        console.log(this.books)},
+      data => this.books = data.result,
       error => this.loading = false
     );
   }

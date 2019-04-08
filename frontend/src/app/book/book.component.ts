@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from '../model/book.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BookService } from '../core/book.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-book',
@@ -14,23 +14,40 @@ export class BookComponent implements OnInit {
   book: Book = new Book();
   submitted = false;
   loading = false;
+  update = false;
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private bookService: BookService
+    private bookService: BookService,
+    private route: ActivatedRoute,
   ) {
     if (!localStorage.getItem('token') || localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) { 
       this.router.navigate(['/']);
     }
   }
+  //TODO: Improve function
   ngOnInit() {
     this.bookForm = 
-      this.formBuilder.group({
-        title: ['', Validators.required],
-        description: ['', Validators.required]});
+        this.formBuilder.group({
+          title: ['', Validators.required],
+          description: ['', Validators.required]});
+    const slug = this.route.snapshot.paramMap.get('slug');
+    if(slug !== null && slug !== null) {
+      this.update = true;
+      this.loading = true;
+      this.bookService.getBookBySlug(slug)
+        .subscribe(
+          data => {
+            this.book = data.result
+            this.bookForm.setValue({title: data.result.title, description: data.result.description})
+            this.loading = false
+          },
+          error => this.loading = false
+        )
+    }
   }
   get form() { return this.bookForm.controls; }
-  onSubmit() {
+  onSubmitCreate() {
     this.submitted = true;
 
     if (this.bookForm.invalid) return;
@@ -40,6 +57,25 @@ export class BookComponent implements OnInit {
     this.book.description = this.form.description.value;
 
     this.bookService.createBook(this.book)
+        .subscribe(
+            data => {
+                this.loading = false;
+                this.router.navigate(['dashboard']);
+            },
+            error => {
+                this.loading = false;
+            });
+  }
+  onSubmitUpdate() {
+    this.submitted = true;
+
+    if (this.bookForm.invalid) return;
+    
+    this.loading = true;
+    this.book.title = this.form.title.value;
+    this.book.description = this.form.description.value;
+
+    this.bookService.updateBook({slug: this.book.slug, title: this.book.title, description: this.book.description})
         .subscribe(
             data => {
                 this.loading = false;
